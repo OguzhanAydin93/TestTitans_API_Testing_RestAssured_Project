@@ -25,10 +25,14 @@ public class Sorgular {
 
     int accountId = 0;
 
+    int movieID =0;
+
+    int statusCode=0;
+
 
 
     @BeforeClass
-    public void setup(){
+    public void setup() {
 
         baseURI = "https://www.themoviedb.org";
 
@@ -61,22 +65,22 @@ public class Sorgular {
 //    }
 
     @Test
-    public void getAccountDetails(){
+    public void getAccountDetails() {
 
 
         accountId =
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/account")
+                        .when()
+                        .get(url + "/account")
 
-                .then()
-                .log().body()
-                .statusCode(200)
-                .extract().path("id")
+                        .then()
+                        .log().body()
+                        .statusCode(200)
+                        .extract().path("id")
 
-                ;
+        ;
 
         System.out.println("id = " + accountId);
 
@@ -84,281 +88,337 @@ public class Sorgular {
     }
 
     @Test(dependsOnMethods = "getAccountDetails")
-    public void addMovieToFavorite(){
+    public void addMovieToFavorite() {
 
-        Map<String,Object> favoriteMovie =new HashMap<>();
-        favoriteMovie.put("media_type","movie");
-        favoriteMovie.put("media_id","5de6f6133faba00015133c4d");
-        favoriteMovie.put("favorite",true);
+        Map<String, Object> favoriteMovie = new HashMap<>();
+        favoriteMovie.put("media_type", "movie");
+        favoriteMovie.put("media_id", "5de6f6133faba00015133c4d");
+        favoriteMovie.put("favorite", true);
 
         given()
                 .spec(reqSpec)
                 .body(favoriteMovie)
 
                 .when()
-                .post(url+"/account/"+accountId+"/favorite")
+                .post(url + "/account/" + accountId + "/favorite")
 
                 .then()
                 .log().body()
                 .statusCode(201)
-                .body("status_message",equalTo("The item/record was updated successfully."))
+                .body("status_message", equalTo("The item/record was updated successfully."))
 
-                ;
+        ;
 
     }
 
     @Test(dependsOnMethods = "addMovieToFavorite")
-    public void addMovieToWatchlist(){
+    public void addMovieToWatchlist() {
 
-        Map<String,Object> watchListMovie = new HashMap<>();
-        watchListMovie.put("media_type","movie");
-        watchListMovie.put("media_id","5de6f6133faba00015133c4d");
-        watchListMovie.put("watchlist",true);
+        Map<String, Object> watchListMovie = new HashMap<>();
+        watchListMovie.put("media_type", "movie");
+        watchListMovie.put("media_id", "5de6f6133faba00015133c4d");
+        watchListMovie.put("watchlist", true);
 
         given()
                 .spec(reqSpec)
                 .body(watchListMovie)
 
                 .when()
-                .post(url+"/account/"+accountId+"/watchlist")
+                .post(url + "/account/" + accountId + "/watchlist")
 
                 .then()
                 .statusCode(201)
-                .body("status_message",equalTo("The item/record was updated successfully."))
+                .body("status_message", equalTo("The item/record was updated successfully."))
 
-                ;
+        ;
 
     }
 
     @Test(dependsOnMethods = "addMovieToWatchlist")
-    public void favoriteMovies(){
+    public void favoriteMovies() {
 
         int page =
 
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/account/"+accountId+"/favorite/movies")
+                        .when()
+                        .get(url + "/account/" + accountId + "/favorite/movies")
 
-                .then()
-                .statusCode(200)
-                .extract().path("page")
+                        .then()
+                        .statusCode(200)
+                        .extract().path("page");
 
-                ;
-
-        Assert.assertTrue(page==1);
+        Assert.assertTrue(page == 1);
 
     }
 
     @Test(dependsOnMethods = "favoriteMovies")
-    public void favoriteTv(){
+    public void favoriteTv() {
 
         int page =
 
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/account/"+accountId+"/favorite/tv")
+                        .when()
+                        .get(url + "/account/" + accountId + "/favorite/tv")
 
-                .then()
-                .statusCode(200)
-                .extract().path("page")
+                        .then()
+                        .statusCode(200)
+                        .extract().path("page");
 
-        ;
-
-        Assert.assertTrue(page==1);
+        Assert.assertTrue(page == 1);
 
     }
 
     @Test(dependsOnMethods = "favoriteTv")
-    public void ratedMovie(){
+    public void ratedMovie() {
 
         int page =
 
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/account/"+accountId+"/rated/movies")
+                        .when()
+                        .get(url + "/account/" + accountId + "/rated/movies")
 
 
-                .then()
-                .statusCode(200)
-                .extract().path("page")
+                        .then()
+                        .statusCode(200)
+                        .extract().path("page");
 
-        ;
-
-        Assert.assertTrue(page==1);
+        Assert.assertTrue(page == 1);
 
     }
 
     @Test(dependsOnMethods = "ratedMovie")
-    public void ratedTv(){
+    public void ratedTv() {
 
         int page =
 
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/account/"+accountId+"/rated/tv")
+                        .when()
+                        .get(url + "/account/" + accountId + "/rated/tv")
 
-                .then()
-                .statusCode(200)
-                .extract().path("page")
+                        .then()
+                        .statusCode(200)
+                        .extract().path("page");
 
-        ;
-
-        Assert.assertTrue(page==1);
+        Assert.assertTrue(page == 1);
 
 
     }
 
     @Test(dependsOnMethods = "ratedTv")
-    public void watchlistMovies(){
+    public void watchlistMovies() {
 
         int page =
 
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/account/"+accountId+"/watchlist/movies")
+                        .when()
+                        .get(url + "/account/" + accountId + "/watchlist/movies")
 
-                .then()
-                .statusCode(200)
-                .extract().path("page")
+                        .then()
+                        .statusCode(200)
+                        .extract().path("page");
 
-        ;
-
-        Assert.assertTrue(page==1);
+        Assert.assertTrue(page == 1);
 
 
     }
 
     @Test(dependsOnMethods = "watchlistMovies")
-    public void watchlistTv(){
+    public void watchlistTv() {
 
         int page =
 
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/account/"+accountId+"/watchlist/tv")
+                        .when()
+                        .get(url + "/account/" + accountId + "/watchlist/tv")
 
-                .then()
-                .statusCode(200)
-                .extract().path("page")
+                        .then()
+                        .statusCode(200)
+                        .extract().path("page");
 
-        ;
-
-        Assert.assertTrue(page==1);
-
+        Assert.assertTrue(page == 1);
 
 
     }
 
     @Test(dependsOnMethods = "watchlistTv")
-    public void moreList(){
+    public void moreList() {
 
         int genres =
 
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/genre/movie/list")
+                        .when()
+                        .get(url + "/genre/movie/list")
 
-                .then()
-                .statusCode(200)
-                .extract().path("genres.id[0]")
+                        .then()
+                        .statusCode(200)
+                        .extract().path("genres.id[0]");
 
-                ;
-
-        Assert.assertTrue(genres==28);
+        Assert.assertTrue(genres == 28);
 
     }
 
     @Test(dependsOnMethods = "moreList")
-    public void tvList(){
+    public void tvList() {
 
         int genres =
 
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/genre/tv/list")
+                        .when()
+                        .get(url + "/genre/tv/list")
 
-                .then()
-                .statusCode(200)
-                .extract().path("genres.id[0]")
+                        .then()
+                        .statusCode(200)
+                        .extract().path("genres.id[0]");
 
-                ;
-
-        Assert.assertTrue(genres==10759);
+        Assert.assertTrue(genres == 10759);
 
 
     }
 
     @Test(dependsOnMethods = "tvList")
-    public void nowPlaying(){
+    public void nowPlaying() {
 
         String dates =
 
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/movie/now_playing")
+                        .when()
+                        .get(url + "/movie/now_playing")
 
-                .then()
-                .statusCode(200)
-                .extract().path("dates.maximum")
+                        .then()
+                        .statusCode(200)
+                        .extract().path("dates.maximum");
 
-                ;
-
-        Assert.assertEquals(dates,"2024-05-22");
-
+        Assert.assertEquals(dates, "2024-05-22");
 
 
     }
 
     @Test(dependsOnMethods = "nowPlaying")
-    public void popular(){
+    public void popular() {
 
         int page =
 
-        given()
-                .spec(reqSpec)
+                given()
+                        .spec(reqSpec)
 
-                .when()
-                .get(url+"/movie/popular")
+                        .when()
+                        .get(url + "/movie/popular")
 
-                .then()
-                .statusCode(200)
-                .extract().path("page")
+                        .then()
+                        .statusCode(200)
+                        .extract().path("page");
 
-                ;
-
-        Assert.assertTrue(page==1);
+        Assert.assertTrue(page == 1);
 
 
     }
 
     @Test(dependsOnMethods = "popular")
-    public void topRated(){
+    public void topRated() {
 
         int page =
+
+                given()
+                        .spec(reqSpec)
+
+                        .when()
+                        .get(url + "/movie/top_rated")
+
+                        .then()
+                        .statusCode(200)
+                        .extract().path("page");
+
+        Assert.assertTrue(page == 1);
+    }
+
+    @Test(dependsOnMethods = "topRated")
+    public void upComming() {
+
+        String dates =
+
+                given()
+                        .spec(reqSpec)
+
+                        .when()
+                        .get(url + "/movie/upcoming")
+
+                        .then()
+                        .statusCode(200)
+                        .extract().path("dates.minimum");
+
+        Assert.assertEquals(dates, "2024-05-22");
+    }
+
+    @Test(dependsOnMethods = "upComming")
+    public void searchMovie() {
+
+        given()
+                .spec(reqSpec)
+                .param("query", "dune")
+
+                .when()
+                .get(url + "/search/movie")
+
+                .then()
+                .statusCode(200)
+
+        ;
+
+
+    }
+
+    @Test(dependsOnMethods = "searchMovie")
+    public void getMovieDetails() {
+
+        movieID =
 
         given()
                 .spec(reqSpec)
 
                 .when()
-                .get(url+"/movie/top_rated")
+                .get(url+"/movie/"+653346)
+
+                .then()
+                .statusCode(200)
+                .extract().path("id")
+
+        ;
+
+        System.out.println("movieID = " + movieID);
+
+       Assert.assertTrue(movieID==653346);
+
+    }
+
+    @Test(dependsOnMethods = "getMovieDetails")
+    public void searchforKeywords(){
+
+        int page =
+
+        given()
+                .spec(reqSpec)
+                .param("query","star")
+
+                .when()
+                .get(url+"/search/keyword")
 
                 .then()
                 .statusCode(200)
@@ -369,26 +429,76 @@ public class Sorgular {
         Assert.assertTrue(page==1);
     }
 
-    @Test(dependsOnMethods = "topRated")
-    public void upComming(){
+    @Test(dependsOnMethods = "searchforKeywords")
+    public void addMovieRating(){
 
-        String dates =
+        Map<String,Object> movieRating =new HashMap<>();
+        movieRating.put("value",8.5);
+
+        boolean success=
+
+        given()
+                .spec(reqSpec)
+                .body(movieRating)
+
+                .when()
+                .post(url + "/movie/" + movieID + "/rating")
+
+                .then()
+                .statusCode(201)
+                .extract().path("success")
+
+                ;
+
+        Assert.assertEquals(success,true);
+
+    }
+
+    @Test(dependsOnMethods = "addMovieRating")
+    public void deleteMovieRating(){
 
         given()
                 .spec(reqSpec)
 
                 .when()
-                .get(url+"/movie/upcoming")
+                .delete(url+"/movie/"+movieID+"/rating")
 
                 .then()
                 .statusCode(200)
-                .extract().path("dates.minimum")
 
                 ;
 
-        Assert.assertEquals(dates,"2024-05-22");
+
     }
 
+    @Test(dependsOnMethods = "deleteMovieRating")
+    public void unauthorizedAccess(){
+
+
+        Map<String,String> bodyParam=new HashMap<>();
+        bodyParam.put("body","{media_id:18}");
+
+
+        given()
+                .spec(reqSpec)
+                .queryParam("session_id","[invalid_session_id]")
+                .pathParam("list_id","[valid_list_id]")
+                .body(bodyParam)
+
+                .when()
+                .post(url+"/list/"+"{list_id}"+"/add_item")
+
+                .then()
+                .statusCode(401)
+                .body("status_code", equalTo(3))
+
+
+        ;
+
+
+
+
+    }
 
 
 
