@@ -304,6 +304,91 @@ public class Sorgular {
 
     }
 
+    @Test(dependsOnMethods = "tvList")
+    public void nowPlaying(){
+
+        String dates =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/movie/now_playing")
+
+                .then()
+                .statusCode(200)
+                .extract().path("dates.maximum")
+
+                ;
+
+        Assert.assertEquals(dates,"2024-05-22");
+
+
+
+    }
+
+    @Test(dependsOnMethods = "nowPlaying")
+    public void popular(){
+
+        int page =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/movie/popular")
+
+                .then()
+                .statusCode(200)
+                .extract().path("page")
+
+                ;
+
+        Assert.assertTrue(page==1);
+
+
+    }
+
+    @Test(dependsOnMethods = "popular")
+    public void topRated(){
+
+        int page =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/movie/top_rated")
+
+                .then()
+                .statusCode(200)
+                .extract().path("page")
+
+                ;
+
+        Assert.assertTrue(page==1);
+    }
+
+    @Test(dependsOnMethods = "topRated")
+    public void upComming(){
+
+        String dates =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/movie/upcoming")
+
+                .then()
+                .statusCode(200)
+                .extract().path("dates.minimum")
+
+                ;
+
+        Assert.assertEquals(dates,"2024-05-22");
+    }
+
 
 
 
