@@ -15,6 +15,8 @@ public class Sorgular {
     String authenticity_token;
     RequestSpecification reqSpec;
 
+    int id =
+
 
 
 
@@ -33,7 +35,7 @@ public class Sorgular {
     }
 
     @Test
-    public void test(){
+    public void LoginToken(){
 
         authenticity_token =
 
@@ -52,5 +54,29 @@ public class Sorgular {
 
 
     }
+
+    @Test
+    public void getAccountDetails(){
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get("/3/account")
+
+                .then()
+                .log().body()
+                .statusCode(200)
+
+
+                ;
+
+
+
+
+
+    }
+
+
 
 }
