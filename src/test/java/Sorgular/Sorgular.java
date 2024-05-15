@@ -4,6 +4,7 @@ package Sorgular;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -12,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.in;
 
 public class Sorgular {
 
@@ -98,6 +101,7 @@ public class Sorgular {
                 .then()
                 .log().body()
                 .statusCode(201)
+                .body("status_message",equalTo("The item/record was updated successfully."))
 
                 ;
 
@@ -116,14 +120,169 @@ public class Sorgular {
                 .body(watchListMovie)
 
                 .when()
-                .get(url+"/account/"+accountId+"/watchlist")
+                .post(url+"/account/"+accountId+"/watchlist")
 
                 .then()
                 .statusCode(201)
+                .body("status_message",equalTo("The item/record was updated successfully."))
 
                 ;
 
     }
+
+    @Test(dependsOnMethods = "addMovieToWatchlist")
+    public void favoriteMovies(){
+
+        int page =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/account/"+accountId+"/favorite/movies")
+
+                .then()
+                .statusCode(200)
+                .extract().path("page")
+
+                ;
+
+        Assert.assertTrue(page==1);
+
+    }
+
+    @Test(dependsOnMethods = "favoriteMovies")
+    public void favoriteTv(){
+
+        int page =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/account/"+accountId+"/favorite/tv")
+
+                .then()
+                .statusCode(200)
+                .extract().path("page")
+
+        ;
+
+        Assert.assertTrue(page==1);
+
+    }
+
+    @Test(dependsOnMethods = "favoriteTv")
+    public void ratedMovie(){
+
+        int page =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/account/"+accountId+"/rated/movies")
+
+
+                .then()
+                .statusCode(200)
+                .extract().path("page")
+
+        ;
+
+        Assert.assertTrue(page==1);
+
+    }
+
+    @Test(dependsOnMethods = "ratedMovie")
+    public void ratedTv(){
+
+        int page =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/account/"+accountId+"/rated/tv")
+
+                .then()
+                .statusCode(200)
+                .extract().path("page")
+
+        ;
+
+        Assert.assertTrue(page==1);
+
+
+    }
+
+    @Test(dependsOnMethods = "ratedTv")
+    public void watchlistMovies(){
+
+        int page =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/account/"+accountId+"/watchlist/movies")
+
+                .then()
+                .statusCode(200)
+                .extract().path("page")
+
+        ;
+
+        Assert.assertTrue(page==1);
+
+
+    }
+
+    @Test(dependsOnMethods = "watchlistMovies")
+    public void watchlistTv(){
+
+        int page =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/account/"+accountId+"/watchlist/tv")
+
+                .then()
+                .statusCode(200)
+                .extract().path("page")
+
+        ;
+
+        Assert.assertTrue(page==1);
+
+
+
+    }
+
+//    @Test(dependsOnMethods = "watchlistTv")
+//    public void moreList(){
+//
+//        int genres =
+//
+//        given()
+//                .spec(reqSpec)
+//
+//                .when()
+//                .get(url+"/genre/movie/list")
+//
+//                .then()
+//                .statusCode(200)
+//                .extract().path("genres")
+//
+//                ;
+//
+//        Assert.assertTrue(genres);
+//
+//    }
+
+
 
 
 
