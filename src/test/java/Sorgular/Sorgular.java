@@ -261,26 +261,48 @@ public class Sorgular {
 
     }
 
-//    @Test(dependsOnMethods = "watchlistTv")
-//    public void moreList(){
-//
-//        int genres =
-//
-//        given()
-//                .spec(reqSpec)
-//
-//                .when()
-//                .get(url+"/genre/movie/list")
-//
-//                .then()
-//                .statusCode(200)
-//                .extract().path("genres")
-//
-//                ;
-//
-//        Assert.assertTrue(genres);
-//
-//    }
+    @Test(dependsOnMethods = "watchlistTv")
+    public void moreList(){
+
+        int genres =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/genre/movie/list")
+
+                .then()
+                .statusCode(200)
+                .extract().path("genres.id[0]")
+
+                ;
+
+        Assert.assertTrue(genres==28);
+
+    }
+
+    @Test(dependsOnMethods = "moreList")
+    public void tvList(){
+
+        int genres =
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .get(url+"/genre/tv/list")
+
+                .then()
+                .statusCode(200)
+                .extract().path("genres.id[0]")
+
+                ;
+
+        Assert.assertTrue(genres==10759);
+
+
+    }
 
 
 
