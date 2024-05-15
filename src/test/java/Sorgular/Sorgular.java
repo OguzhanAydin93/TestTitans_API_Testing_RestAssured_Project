@@ -104,7 +104,7 @@ public class Sorgular {
     }
 
     @Test(dependsOnMethods = "addMovieToFavorite")
-    public void AddMovieToWatchlist(){
+    public void addMovieToWatchlist(){
 
         Map<String,Object> watchListMovie = new HashMap<>();
         watchListMovie.put("media_type","movie");
