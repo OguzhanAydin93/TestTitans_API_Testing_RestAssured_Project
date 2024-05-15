@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.*;
 
-public class LoginToken {
+public class Sorgular {
 
     String authenticity_token;
     RequestSpecification reqSpec;
