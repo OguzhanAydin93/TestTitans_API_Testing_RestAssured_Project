@@ -15,7 +15,7 @@ public class Sorgular {
     String authenticity_token;
     RequestSpecification reqSpec;
 
-    int id =
+    int id = 0;
 
 
 
@@ -65,14 +65,13 @@ public class Sorgular {
                 .get("/3/account")
 
                 .then()
-                .log().body()
+//                .log().body()
                 .statusCode(200)
-
+                .extract().path("id")
 
                 ;
 
-
-
+        System.out.println("id = " + id);
 
 
     }
